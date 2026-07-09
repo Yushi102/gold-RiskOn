@@ -1,0 +1,8 @@
+# Everything ignored by default
+*
+
+# Only allow docs/ for GitHub Pages dashboard
+!docs/
+!docs/index.html
+!docs/.nojekyll
+!.gitignore
