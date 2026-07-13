@@ -4,5 +4,6 @@
 # Only allow docs/ for GitHub Pages dashboard
 !docs/
 !docs/index.html
+!docs/evolution.html
 !docs/.nojekyll
 !.gitignore
