@@ -14,64 +14,38 @@ body {
     max-width: 1200px;
     margin: 0 auto;
 }
-h1 { color: #ffd700; margin-bottom: 4px; font-size: 1.5em; }
-.meta { color: #666; font-size: 0.8em; margin-bottom: 20px; }
-h2 { color: #87ceeb; margin: 24px 0 12px; font-size: 1.1em; border-bottom: 1px solid #222; padding-bottom: 4px; }
+h1 { color:#ff6666; margin-bottom:4px; font-size:1.4em; }
+h2 { color:#87ceeb; margin:20px 0 8px; font-size:1.1em; }
+.meta { color:#666; font-size:0.8em; margin-bottom:12px; }
 table { width:100%; border-collapse:collapse; font-size:0.85em; margin-bottom:16px; }
-th,td { padding:8px 10px; text-align:left; border-bottom:1px solid #1a1a2e; }
-th { background:#111; color:#87ceeb; position:sticky; top:0; }
-tr:hover { background:#1a1a2e; }
-.pos { color:#00e676; font-weight:bold; }
-.neg { color:#ff5252; font-weight:bold; }
-.buy { background:#1b5e20; color:#69f0ae; padding:2px 6px; border-radius:3px; font-size:0.8em; }
-.sell { background:#b71c1c; color:#ff8a80; padding:2px 6px; border-radius:3px; font-size:0.8em; }
-.cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:12px; margin-bottom:20px; }
-.card-detail { margin-bottom:0; }
-.card-detail summary { list-style:none; }
-.card-detail summary::-webkit-details-marker { display:none; }
-.card {
-    background:#111;
-    border-radius:8px;
-    padding:14px;
-    border-left:3px solid #ffd700;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    cursor:pointer;
+th { background:#1a1a2e; padding:8px 6px; text-align:left; font-weight:normal; color:#888; }
+td { padding:6px; border-bottom:1px solid #1a1a2e; }
+.profit { color:#00ff88; }
+.loss { color:#ff4444; }
+.status-box {
+    background: #1a1a2e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
 }
-.card:hover { background:#1a1a2e; }
-.card-info { flex:1; min-width:0; }
-.card h3 { color:#ffd700; font-size:0.85em; margin-bottom:6px; }
-.card .row { display:flex; gap:16px; flex-wrap:wrap; }
-.card .item { }
-.card .label { color:#666; font-size:0.7em; }
-.card .value { font-size:1em; font-weight:bold; }
-.card .chart { flex-shrink:0; }
-.card-expand { background:#0a0a15; padding:12px; border-radius:0 0 8px 8px; border-left:3px solid #333; }
-.card-expand-row { display:flex; gap:16px; flex-wrap:wrap; }
-.card-expand-stats { flex:1; min-width:200px; }
-.card-expand-stats table { width:auto; font-size:0.8em; }
-.card-expand-stats td { padding:3px 10px 3px 0; }
-.stat-lbl { color:#666; }
-.card-expand-charts { flex:1; min-width:200px; }
-.chart-label { color:#666; font-size:0.7em; margin-bottom:2px; }
-.empty { color:#555; padding:16px; font-style:italic; }
-.total-row { background:#111; font-weight:bold; }
+.status-box h3 { color:#ffd700; margin-bottom:8px; font-size:1em; }
+.balance { color:#00d4ff; font-size:1.1em; margin-bottom:8px; }
+nav a { color:#00d4ff; text-decoration:none; font-size:0.85em; }
 @media(max-width:600px) {
     body { padding:10px; font-size:14px; }
     table { font-size:0.75em; }
-    th,td { padding:5px 4px; }
 }
 </style>
 </head>
 <body>
-<h1>💰 GoldRiskOn <span style="color:#ff4444;font-size:0.7em;">[REAL 72406158]</span></h1>
-<nav style="margin-bottom:12px;"><a href="index.html" style="color:#00d4ff;text-decoration:none;font-size:0.85em;">← Demo Dashboard</a> &nbsp;|&nbsp; <a href="evolution.html" style="color:#00d4ff;text-decoration:none;font-size:0.85em;">🧬 Evolution</a></nav>
-<p class="meta">更新: 2026-07-15 21:20:45 — 3分ごとに自動更新</p>
+<h1>💰 GoldRiskOn [REAL] — 72406158</h1>
+<nav style="margin-bottom:12px;"><a href="index.html">← Demo Dashboard</a> &nbsp;|&nbsp; <a href="evolution.html">🧬 Evolution</a></nav>
+<p class="meta">更新: 2026-07-15 21:21:26 — 3分ごとに自動更新</p>
 
-<div style="background:#1a1a2e;border:1px solid #333;border-radius:8px;padding:16px;margin-bottom:16px;">
-<h3 style="color:#ffd700;margin-bottom:8px;font-size:1em;">🤖 エージェント状態</h3>
-<p style="color:#00d4ff;font-size:1.1em;margin-bottom:8px;">残高: ¥6,132 / 有効証拠金: ¥6,132</p>
+<div class="status-box">
+<h3>🤖 エージェント状態</h3>
+<p class="balance">残高: ¥6,132 / 有効証拠金: ¥6,132</p>
 <table>
 <tr><th>Agent</th><th>プロセス</th><th>MT5接続</th><th>マーケット</th><th>PID</th><th>最終ログ</th><th>最終メッセージ</th></tr>
 <tr><td><b>M15 Real</b></td><td><span style="color:#00ff88;">● 稼働中</span></td><td><span style="color:#00ff88;">● 接続OK</span></td><td><span style="color:#00ff88;">開場</span></td><td>3192</td><td>07/15 21:15:44</td><td style='color:#888;font-size:0.8em;'>M15-REAL] bar close=4037.86 | action=None | pos=0</td></tr>
@@ -79,6 +53,7 @@ tr:hover { background:#1a1a2e; }
 
 </table>
 </div>
+
 <h2>📊 ポジション (0件)</h2>
 <p class="empty">ノーポジ</p>
 
@@ -202,9 +177,7 @@ tr:hover { background:#1a1a2e; }
 </div>
 </details></div>
 
-<h2>📜 トレード履歴 (93件 / 最新100件表示)</h2>
-<details>
-<summary style="cursor:pointer; color:#87ceeb; padding:6px 0;">クリックで展開</summary>
+<h2>📜 トレード履歴 (93件)</h2>
 <table>
 <thead><tr><th>日時</th><th>エージェント</th><th>方向</th><th>Lot</th><th>価格</th><th>損益</th></tr></thead>
 <tbody><tr>
@@ -859,10 +832,8 @@ tr:hover { background:#1a1a2e; }
 <td>4063.36</td>
 <td class="neg">¥-277</td>
 </tr></tbody></table>
-</details>
 
 <script>
-// Auto-reload every 3 minutes
 setTimeout(()=>location.reload(), 180000);
 </script>
 </body>
