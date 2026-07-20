@@ -70,21 +70,21 @@ nav a:hover { text-decoration:underline; }
 <body>
 <h1>🧬 Evolution Dashboard</h1>
 <nav><a href="index.html">← Main Dashboard</a></nav>
-<p class="meta">更新: 2026-07-18 10:45:49</p>
+<p class="meta">更新: 2026-07-20 12:09:31</p>
 
 <div class="metrics">
-<div class="metric"><div class="label">Total Agents</div><div class="value">49</div></div>
-<div class="metric"><div class="label">Active</div><div class="value">24</div></div>
-<div class="metric"><div class="label">Mean Fitness</div><div class="value">0.460</div></div>
-<div class="metric"><div class="label">Generation</div><div class="value">1</div></div>
-<div class="metric"><div class="label">Regime</div><div class="value">range</div></div>
+<div class="metric"><div class="label">Total Agents</div><div class="value">80</div></div>
+<div class="metric"><div class="label">Active</div><div class="value">20</div></div>
+<div class="metric"><div class="label">Mean Fitness</div><div class="value">0.455</div></div>
+<div class="metric"><div class="label">Generation</div><div class="value">2</div></div>
+<div class="metric"><div class="label">Regime</div><div class="value">compression</div></div>
 </div>
 
 <h2>👥 Population</h2>
 <table>
 <thead><tr><th>Agent ID</th><th>Fitness</th><th>Rank</th><th>Gen</th><th>Architecture</th><th>Specialization</th><th>Status</th></tr></thead>
-<tbody><tr><td>seed_rl_m1</td><td class="warn">0.562</td><td>1</td><td>0</td><td>qr_dqn</td><td>timing</td><td class="status-active">active</td></tr>
-<tr><td>seed_void_hunter</td><td class="warn">0.562</td><td>2</td><td>0</td><td>qr_dqn</td><td>volatility</td><td class="status-active">active</td></tr>
+<tbody><tr><td>seed_rl_m1</td><td class="warn">0.562</td><td>1</td><td>0</td><td>qr_dqn</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>seed_void_hunter</td><td class="warn">0.562</td><td>2</td><td>0</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
 <tr><td>seed_top2_macd_s</td><td class="warn">0.550</td><td>3</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
 <tr><td>seed_rl_m15</td><td class="warn">0.538</td><td>4</td><td>0</td><td>qr_dqn</td><td>trend</td><td class="status-active">active</td></tr>
 <tr><td>seed_ind_b_hamme</td><td class="warn">0.528</td><td>5</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-culled">culled</td></tr>
@@ -103,35 +103,66 @@ nav a:hover { text-decoration:underline; }
 <tr><td>seed_top5_macd_s</td><td class="warn">0.454</td><td>18</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
 <tr><td>seed_tw_london</td><td class="warn">0.448</td><td>19</td><td>0</td><td>mlp_policy</td><td>timing</td><td class="status-culled">culled</td></tr>
 <tr><td>seed_tw_ny</td><td class="warn">0.448</td><td>20</td><td>0</td><td>mlp_policy</td><td>timing</td><td class="status-culled">culled</td></tr>
-<tr><td>seed_rl_m15_real</td><td class="warn">0.445</td><td>21</td><td>0</td><td>qr_dqn</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>seed_rl_m15_real</td><td class="warn">0.445</td><td>21</td><td>0</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
 <tr><td>seed_fix_a</td><td class="warn">0.439</td><td>22</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-active">active</td></tr>
 <tr><td>seed_dist_pred</td><td class="warn">0.415</td><td>23</td><td>0</td><td>qr_dqn</td><td>volatility</td><td class="status-active">active</td></tr>
 <tr><td>seed_fix_e</td><td class="warn">0.402</td><td>24</td><td>0</td><td>mlp_policy</td><td>volatility</td><td class="status-active">active</td></tr>
 <tr><td>seed_tw_asia</td><td class="neg">0.399</td><td>25</td><td>0</td><td>mlp_policy</td><td>timing</td><td class="status-active">active</td></tr>
-<tr><td>seed_top3_ichi_s</td><td class="neg">0.354</td><td>26</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>seed_top3_ichi_s</td><td class="neg">0.354</td><td>26</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-culled">culled</td></tr>
 <tr><td>seed_dist_commit</td><td class="neg">0.344</td><td>27</td><td>0</td><td>qr_dqn</td><td>volatility</td><td class="status-active">active</td></tr>
 <tr><td>seed_tick_breako</td><td class="neg">0.342</td><td>28</td><td>0</td><td>qr_dqn</td><td>timing</td><td class="status-active">active</td></tr>
 <tr><td>seed_rl_h1</td><td class="neg">0.250</td><td>29</td><td>0</td><td>qr_dqn</td><td>macro</td><td class="status-active">active</td></tr>
-<tr><td>evo_eee29626</td><td class="neg">0.000</td><td>30</td><td>1</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-training">training</td></tr>
-<tr><td>evo_727635b0</td><td class="neg">0.000</td><td>31</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-training">training</td></tr>
-<tr><td>evo_0272811d</td><td class="neg">0.000</td><td>32</td><td>1</td><td>mlp_policy</td><td>trend</td><td class="status-training">training</td></tr>
-<tr><td>evo_2513f901</td><td class="neg">0.000</td><td>33</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-training">training</td></tr>
-<tr><td>evo_941fb440</td><td class="neg">0.000</td><td>34</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-training">training</td></tr>
-<tr><td>evo_23c04259</td><td class="neg">0.000</td><td>35</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-training">training</td></tr>
-<tr><td>evo_a361f380</td><td class="neg">0.000</td><td>36</td><td>1</td><td>mlp_policy</td><td>trend</td><td class="status-training">training</td></tr>
-<tr><td>evo_6aed85bb</td><td class="neg">0.000</td><td>37</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-training">training</td></tr>
-<tr><td>evo_81855524</td><td class="neg">0.000</td><td>38</td><td>1</td><td>mlp_policy</td><td>timing</td><td class="status-training">training</td></tr>
-<tr><td>evo_d1659c0d</td><td class="neg">0.000</td><td>39</td><td>1</td><td>mlp_policy</td><td>trend</td><td class="status-training">training</td></tr>
-<tr><td>evo_a76b5a47</td><td class="neg">0.000</td><td>40</td><td>1</td><td>mlp_policy</td><td>timing</td><td class="status-training">training</td></tr>
-<tr><td>evo_a7a95546</td><td class="neg">0.000</td><td>41</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-training">training</td></tr>
-<tr><td>evo_8f4aebac</td><td class="neg">0.000</td><td>42</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-training">training</td></tr>
-<tr><td>evo_ae880659</td><td class="neg">0.000</td><td>43</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-training">training</td></tr>
-<tr><td>evo_448bfb56</td><td class="neg">0.000</td><td>44</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-training">training</td></tr>
-<tr><td>evo_e1112f5d</td><td class="neg">0.000</td><td>45</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-training">training</td></tr>
-<tr><td>evo_22b13bf2</td><td class="neg">0.000</td><td>46</td><td>1</td><td>mlp_policy</td><td>timing</td><td class="status-training">training</td></tr>
-<tr><td>evo_28d45152</td><td class="neg">0.000</td><td>47</td><td>1</td><td>mlp_policy</td><td>trend</td><td class="status-training">training</td></tr>
-<tr><td>evo_8bbed9d7</td><td class="neg">0.000</td><td>48</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-training">training</td></tr>
-<tr><td>evo_f5082b7f</td><td class="neg">0.000</td><td>49</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-training">training</td></tr></tbody>
+<tr><td>evo_eee29626</td><td class="neg">0.000</td><td>30</td><td>1</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_727635b0</td><td class="neg">0.000</td><td>31</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_0272811d</td><td class="neg">0.000</td><td>32</td><td>1</td><td>mlp_policy</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_2513f901</td><td class="neg">0.000</td><td>33</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_941fb440</td><td class="neg">0.000</td><td>34</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_23c04259</td><td class="neg">0.000</td><td>35</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_a361f380</td><td class="neg">0.000</td><td>36</td><td>1</td><td>mlp_policy</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_6aed85bb</td><td class="neg">0.000</td><td>37</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_81855524</td><td class="neg">0.000</td><td>38</td><td>1</td><td>mlp_policy</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_d1659c0d</td><td class="neg">0.000</td><td>39</td><td>1</td><td>mlp_policy</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_a76b5a47</td><td class="neg">0.000</td><td>40</td><td>1</td><td>mlp_policy</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_a7a95546</td><td class="neg">0.000</td><td>41</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_8f4aebac</td><td class="neg">0.000</td><td>42</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_ae880659</td><td class="neg">0.000</td><td>43</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_448bfb56</td><td class="neg">0.000</td><td>44</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_e1112f5d</td><td class="neg">0.000</td><td>45</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_22b13bf2</td><td class="neg">0.000</td><td>46</td><td>1</td><td>mlp_policy</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_28d45152</td><td class="neg">0.000</td><td>47</td><td>1</td><td>mlp_policy</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_8bbed9d7</td><td class="neg">0.000</td><td>48</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_f5082b7f</td><td class="neg">0.000</td><td>49</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_083f1515</td><td class="neg">0.000</td><td>50</td><td>1</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_c45b9ec7</td><td class="neg">0.000</td><td>51</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_248e5fe2</td><td class="neg">0.000</td><td>52</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_1a998261</td><td class="neg">0.000</td><td>53</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_fad493f8</td><td class="neg">0.000</td><td>54</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_2c1566de</td><td class="neg">0.000</td><td>55</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_67d91e4e</td><td class="neg">0.000</td><td>56</td><td>1</td><td>qr_dqn</td><td>mean_reversion</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_6c2d6fdd</td><td class="neg">0.000</td><td>57</td><td>1</td><td>mlp_policy</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_300f6444</td><td class="neg">0.000</td><td>58</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_0b5b1706</td><td class="neg">0.000</td><td>59</td><td>1</td><td>qr_dqn</td><td>timing</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_a64b5860</td><td class="neg">0.000</td><td>60</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_349ec381</td><td class="neg">0.000</td><td>61</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_7c82fc4b</td><td class="neg">0.000</td><td>62</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_add8680e</td><td class="neg">0.000</td><td>63</td><td>2</td><td>qr_dqn</td><td>timing</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_d39da20a</td><td class="neg">0.000</td><td>64</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_25330516</td><td class="neg">0.000</td><td>65</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_f0d40b0e</td><td class="neg">0.000</td><td>66</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_f81fd409</td><td class="neg">0.000</td><td>67</td><td>2</td><td>mlp_policy</td><td>timing</td><td class="status-training">training</td></tr>
+<tr><td>evo_308cf8f7</td><td class="neg">0.000</td><td>68</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_44718980</td><td class="neg">0.000</td><td>69</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_4741ebd4</td><td class="neg">0.000</td><td>70</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_e635cd03</td><td class="neg">0.000</td><td>71</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_20d5f94b</td><td class="neg">0.000</td><td>72</td><td>2</td><td>mlp_policy</td><td>trend</td><td class="status-training">training</td></tr>
+<tr><td>evo_9f62bccd</td><td class="neg">0.000</td><td>73</td><td>2</td><td>qr_dqn</td><td>timing</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_8aa34bba</td><td class="neg">0.000</td><td>74</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_fd2527c0</td><td class="neg">0.000</td><td>75</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_ce3073c2</td><td class="neg">0.000</td><td>76</td><td>2</td><td>qr_dqn</td><td>timing</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_21ad2e49</td><td class="neg">0.000</td><td>77</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_290afd3e</td><td class="neg">0.000</td><td>78</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-training">training</td></tr>
+<tr><td>evo_7f7b11bf</td><td class="neg">0.000</td><td>79</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_66dd8ee0</td><td class="neg">0.000</td><td>80</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr></tbody>
 </table>
 
 <div class="grid">
@@ -139,8 +170,7 @@ nav a:hover { text-decoration:underline; }
 <h2>🎯 Recent Decisions (last 20)</h2>
 <table>
 <thead><tr><th>Bar</th><th>Direction</th><th>Value</th><th>Regime</th><th>Price</th></tr></thead>
-<tbody><tr><td>385</td><td class="">HOLD</td><td>0.520</td><td>range</td><td>3969.92</td><td>3952-3984 (160%)</td></tr>
-<tr><td>386</td><td class="">HOLD</td><td>0.523</td><td>range</td><td>3970.13</td><td>3952-3984 (150%)</td></tr>
+<tbody><tr><td>386</td><td class="">HOLD</td><td>0.523</td><td>range</td><td>3970.13</td><td>3952-3984 (150%)</td></tr>
 <tr><td>387</td><td class="">HOLD</td><td>0.516</td><td>range</td><td>3970.53</td><td>3954-3984 (156%)</td></tr>
 <tr><td>388</td><td class="">HOLD</td><td>0.511</td><td>range</td><td>3971.83</td><td>3955-3985 (150%)</td></tr>
 <tr><td>389</td><td class="">HOLD</td><td>0.514</td><td>range</td><td>3971.40</td><td>3955-3985 (152%)</td></tr>
@@ -158,7 +188,8 @@ nav a:hover { text-decoration:underline; }
 <tr><td>401</td><td class="">HOLD</td><td>0.518</td><td>range</td><td>3968.18</td><td>3952-3982 (148%)</td></tr>
 <tr><td>402</td><td class="">HOLD</td><td>0.493</td><td>range</td><td>3966.50</td><td>3951-3980 (146%)</td></tr>
 <tr><td>403</td><td class="">HOLD</td><td>0.514</td><td>range</td><td>3970.18</td><td>3955-3983 (137%)</td></tr>
-<tr><td>404</td><td class="">HOLD</td><td>0.516</td><td>range</td><td>3971.61</td><td>3956-3984 (129%)</td></tr></tbody>
+<tr><td>404</td><td class="">HOLD</td><td>0.516</td><td>range</td><td>3971.61</td><td>3956-3984 (129%)</td></tr>
+<tr><td>361</td><td class="neg">SELL</td><td>0.303</td><td>compression</td><td>4010.77</td><td>-</td></tr></tbody>
 </table>
 </div>
 
