@@ -70,14 +70,14 @@ nav a:hover { text-decoration:underline; }
 <body>
 <h1>🧬 Evolution Dashboard</h1>
 <nav><a href="index.html">← Main Dashboard</a></nav>
-<p class="meta">更新: 2026-08-06 14:01:46</p>
+<p class="meta">更新: 2026-08-06 14:04:50</p>
 
 <div class="metrics">
 <div class="metric"><div class="label">Total Agents</div><div class="value">240</div></div>
 <div class="metric"><div class="label">Active</div><div class="value">27</div></div>
 <div class="metric"><div class="label">Mean Fitness</div><div class="value">0.228</div></div>
 <div class="metric"><div class="label">Generation</div><div class="value">10</div></div>
-<div class="metric"><div class="label">Regime</div><div class="value">range</div></div>
+<div class="metric"><div class="label">Regime</div><div class="value">trend_up</div></div>
 </div>
 
 <h2>👥 Population</h2>
@@ -330,8 +330,7 @@ nav a:hover { text-decoration:underline; }
 <h2>🎯 Recent Decisions (last 20)</h2>
 <table>
 <thead><tr><th>Bar</th><th>Direction</th><th>Value</th><th>Regime</th><th>Price</th></tr></thead>
-<tbody><tr><td>2180</td><td class="">HOLD</td><td>0.719</td><td>range</td><td>4248.66</td><td>-</td></tr>
-<tr><td>2181</td><td class="">HOLD</td><td>0.730</td><td>range</td><td>4248.57</td><td>-</td></tr>
+<tbody><tr><td>2181</td><td class="">HOLD</td><td>0.730</td><td>range</td><td>4248.57</td><td>-</td></tr>
 <tr><td>2182</td><td class="">HOLD</td><td>0.662</td><td>range</td><td>4249.29</td><td>-</td></tr>
 <tr><td>2183</td><td class="">HOLD</td><td>0.742</td><td>range</td><td>4248.76</td><td>-</td></tr>
 <tr><td>2184</td><td class="">HOLD</td><td>0.748</td><td>range</td><td>4248.32</td><td>-</td></tr>
@@ -349,7 +348,8 @@ nav a:hover { text-decoration:underline; }
 <tr><td>2196</td><td class="">HOLD</td><td>0.533</td><td>range</td><td>4253.56</td><td>-</td></tr>
 <tr><td>2197</td><td class="">HOLD</td><td>0.519</td><td>range</td><td>4252.87</td><td>-</td></tr>
 <tr><td>2198</td><td class="neg">SELL</td><td>0.632</td><td>range</td><td>4260.22</td><td>-</td></tr>
-<tr><td>2199</td><td class="pos">BUY</td><td>0.561</td><td>range</td><td>4262.25</td><td>-</td></tr></tbody>
+<tr><td>2199</td><td class="pos">BUY</td><td>0.561</td><td>range</td><td>4262.25</td><td>-</td></tr>
+<tr><td>2200</td><td class="neg">SELL</td><td>0.521</td><td>trend_up</td><td>4261.83</td><td>-</td></tr></tbody>
 </table>
 </div>
 
@@ -364,11 +364,16 @@ nav a:hover { text-decoration:underline; }
 
 <h2>💰 Parliament Trade History (Chairman Magic 920100)</h2>
 <div style="margin-bottom:8px;font-size:0.85em;">
-Trades: <b>21</b> | Win Rate: <b>24%</b> | PnL: <span class="neg"><b>¥-10846</b></span>
+Trades: <b>25</b> | Win Rate: <b>32%</b> | PnL: <span class="neg"><b>¥-11023</b></span>
 </div>
 <table>
 <thead><tr><th>Time</th><th>Direction</th><th>Entry</th><th>Exit</th><th>PnL</th><th>Source</th></tr></thead>
-<tbody><tr><td>08/06 13:55</td><td class="neg">SELL</td><td>4261.83</td><td>4261.95</td><td class="neg">¥-19</td><td>Chairman</td></tr>
+<tbody><tr><td>08/06 14:02</td><td class="pos">BUY</td><td>4261.95</td><td>4263.44</td><td class="pos">¥235</td><td>Shadow 3</td></tr>
+<tr><td>08/06 14:02</td><td class="neg">SELL</td><td>4261.65</td><td>4263.67</td><td class="neg">¥-319</td><td>Shadow 1</td></tr>
+<tr><td>08/06 14:02</td><td class="pos">BUY</td><td>4261.95</td><td>4263.48</td><td class="pos">¥241</td><td>Shadow 0</td></tr>
+<tr><td>08/06 14:02</td><td class="pos">BUY</td><td>4261.95</td><td>4263.48</td><td class="pos">¥241</td><td>Shadow 0</td></tr>
+<tr><td>08/06 14:02</td><td class="pos">BUY</td><td>4261.80</td><td>4263.22</td><td class="pos">¥224</td><td>Chairman</td></tr>
+<tr><td>08/06 13:55</td><td class="neg">SELL</td><td>4261.83</td><td>4261.95</td><td class="neg">¥-19</td><td>Chairman</td></tr>
 <tr><td>08/06 13:50</td><td class="pos">BUY</td><td>4289.18</td><td>4261.83</td><td class="neg">¥-4314</td><td>Chairman</td></tr>
 <tr><td>08/06 13:49</td><td class="pos">BUY</td><td>4258.01</td><td>4260.12</td><td class="pos">¥333</td><td>Shadow 0</td></tr>
 <tr><td>08/06 13:24</td><td class="pos">BUY</td><td>4264.20</td><td>4261.74</td><td class="neg">¥-388</td><td>Shadow 0</td></tr>
@@ -387,8 +392,7 @@ Trades: <b>21</b> | Win Rate: <b>24%</b> | PnL: <span class="neg"><b>¥-10846</b
 <tr><td>08/06 11:19</td><td class="pos">BUY</td><td>4294.36</td><td>4293.78</td><td class="neg">¥-91</td><td>Shadow 1</td></tr>
 <tr><td>08/06 11:05</td><td class="pos">BUY</td><td>4289.84</td><td>4301.10</td><td class="pos">¥1775</td><td>Shadow 1</td></tr>
 <tr><td>08/06 10:59</td><td class="pos">BUY</td><td>4289.23</td><td>4287.39</td><td class="neg">¥-290</td><td>Shadow 4</td></tr>
-<tr><td>08/06 10:54</td><td class="neg">SELL</td><td>4274.78</td><td>4289.16</td><td class="neg">¥-2267</td><td>Chairman</td></tr>
-<tr><td>08/06 10:37</td><td class="pos">BUY</td><td>4283.49</td><td>4288.56</td><td class="pos">¥799</td><td>Shadow 4</td></tr></tbody>
+<tr><td>08/06 10:54</td><td class="neg">SELL</td><td>4274.78</td><td>4289.16</td><td class="neg">¥-2267</td><td>Chairman</td></tr></tbody>
 </table>
 
 <script>
