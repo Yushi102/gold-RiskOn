@@ -1,301 +1,356 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="30">
-    <title>Evolution Dashboard</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Consolas, monospace;
-            background: #1a1a2e;
-            color: #e0e0e0;
-            padding: 20px;
-        }
-        h1 {
-            color: #00d4ff;
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 1.6em;
-        }
-        .subtitle {
-            text-align: center;
-            color: #888;
-            margin-bottom: 20px;
-            font-size: 0.85em;
-        }
-        .metrics {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-        .metric {
-            background: #16213e;
-            border: 1px solid #0f3460;
-            border-radius: 8px;
-            padding: 12px 20px;
-            text-align: center;
-            min-width: 120px;
-        }
-        .metric .label {
-            color: #888;
-            font-size: 0.75em;
-            text-transform: uppercase;
-        }
-        .metric .value {
-            color: #00d4ff;
-            font-size: 1.4em;
-            font-weight: bold;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .panel {
-            background: #16213e;
-            border: 1px solid #0f3460;
-            border-radius: 8px;
-            padding: 15px;
-            overflow-x: auto;
-        }
-        .panel-full {
-            grid-column: 1 / -1;
-        }
-        .panel h2 {
-            color: #00d4ff;
-            font-size: 1em;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #0f3460;
-            padding-bottom: 5px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82em;
-        }
-        th {
-            background: #0f3460;
-            color: #00d4ff;
-            padding: 6px 8px;
-            text-align: left;
-            font-weight: 600;
-        }
-        td {
-            padding: 5px 8px;
-            border-bottom: 1px solid #1a1a3e;
-        }
-        tr:hover { background: #1a2a4e; }
-        .footer {
-            text-align: center;
-            color: #555;
-            font-size: 0.7em;
-            margin-top: 15px;
-        }
-        @media (max-width: 900px) {
-            .grid { grid-template-columns: 1fr; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoldRiskOn — Evolution Dashboard</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f1a;
+    color: #e0e0e0;
+    padding: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+h1 { color: #ffd700; margin-bottom: 4px; font-size: 1.5em; }
+.meta { color: #666; font-size: 0.8em; margin-bottom: 20px; }
+h2 { color: #87ceeb; margin: 24px 0 12px; font-size: 1.1em; border-bottom: 1px solid #222; padding-bottom: 4px; }
+table { width:100%; border-collapse:collapse; font-size:0.85em; margin-bottom:16px; }
+th,td { padding:8px 10px; text-align:left; border-bottom:1px solid #1a1a2e; }
+th { background:#111; color:#87ceeb; position:sticky; top:0; }
+tr:hover { background:#1a1a2e; }
+.pos { color:#00e676; font-weight:bold; }
+.neg { color:#ff5252; font-weight:bold; }
+.warn { color:#ff9800; font-weight:bold; }
+.empty { color:#555; padding:16px; font-style:italic; text-align:center; }
+nav { margin-bottom: 12px; }
+nav a { color:#00d4ff; text-decoration:none; font-size:0.85em; margin-right:16px; }
+nav a:hover { text-decoration:underline; }
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.metric {
+    background: #111;
+    border-radius: 8px;
+    padding: 14px;
+    border-left: 3px solid #ffd700;
+    text-align: center;
+}
+.metric .label { color: #666; font-size: 0.7em; text-transform: uppercase; }
+.metric .value { color: #ffd700; font-size: 1.4em; font-weight: bold; }
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.status-active { color:#4caf50; }
+.status-nursery { color:#ff9800; }
+.status-training { color:#2196f3; }
+.status-suspended { color:#9e9e9e; }
+.status-culled { color:#f44336; }
+.status-shadow { color:#9c27b0; }
+.ev-spawn { color:#2196f3; }
+.ev-graduate { color:#4caf50; }
+.ev-cull { color:#f44336; }
+.ev-fail { color:#ff9800; }
+@media(max-width:600px) {
+    body { padding:10px; font-size:14px; }
+    table { font-size:0.75em; }
+    th,td { padding:5px 4px; }
+    .grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
-    <h1>&#x1F9EC; Evolutionary Agent Parliament</h1>
-    <div class="subtitle">Auto-refresh: 30s | 2026-08-20 11:16:21</div>
+<h1>🧬 Evolution Dashboard</h1>
+<nav><a href="index.html">← Main Dashboard</a></nav>
+<p class="meta">更新: 2026-08-20 11:16:24</p>
 
-    <div class="metrics">
-        <div class="metric">
-            <div class="label">Generation</div>
-            <div class="value">12</div>
-        </div>
-        <div class="metric">
-            <div class="label">Active</div>
-            <div class="value">29</div>
-        </div>
-        <div class="metric">
-            <div class="label">Nursery</div>
-            <div class="value">52</div>
-        </div>
-        <div class="metric">
-            <div class="label">Mean Fitness</div>
-            <div class="value">0.481</div>
-        </div>
-        <div class="metric">
-            <div class="label">Total Spawned</div>
-            <div class="value">484</div>
-        </div>
-        <div class="metric">
-            <div class="label">Total Culled</div>
-            <div class="value">127</div>
-        </div>
-        <div class="metric">
-            <div class="label">Regime</div>
-            <div class="value">range</div>
-        </div>
-        <div class="metric">
-            <div class="label">Chairman PnL</div>
-            <div class="value">126,138 JPY</div>
-        </div>
-        <div class="metric">
-            <div class="label">Chairman Trades</div>
-            <div class="value">132</div>
-        </div>
-    </div>
+<div class="metrics">
+<div class="metric"><div class="label">Total Agents</div><div class="value">205</div></div>
+<div class="metric"><div class="label">Active</div><div class="value">29</div></div>
+<div class="metric"><div class="label">Mean Fitness</div><div class="value">0.481</div></div>
+<div class="metric"><div class="label">Generation</div><div class="value">12</div></div>
+<div class="metric"><div class="label">Regime</div><div class="value">range</div></div>
+</div>
 
-    <div class="grid">
-        <div class="panel panel-full">
-            <h2>&#x1F465; Active Agents (Seed + Graduated)</h2>
-            <table>
-                <tr><th>Agent ID</th><th>Fitness</th><th>Attn</th><th>Rank</th><th>Gen</th><th>Architecture</th><th>Specialization</th><th>Status</th></tr>
-                <tr><td>seed_ml_supertre</td><td style='color:#ff9800;font-weight:bold;'>0.552</td><td style='color:#ff9800;'>0.035</td><td>1</td><td>0</td><td>mlp_policy</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_rl_m5</td><td style='color:#ff9800;font-weight:bold;'>0.548</td><td style='color:#ff9800;'>0.035</td><td>2</td><td>0</td><td>qr_dqn</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_rl_h1</td><td style='color:#ff9800;font-weight:bold;'>0.528</td><td style='color:#ff9800;'>0.036</td><td>3</td><td>0</td><td>qr_dqn</td><td>macro</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_rl_m1</td><td style='color:#ff9800;font-weight:bold;'>0.520</td><td style='color:#ff9800;'>0.035</td><td>4</td><td>0</td><td>qr_dqn</td><td>timing</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_void_hunter</td><td style='color:#ff9800;font-weight:bold;'>0.520</td><td style='color:#ff9800;'>0.035</td><td>5</td><td>0</td><td>qr_dqn</td><td>volatility</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_ind_b_hamme</td><td style='color:#ff9800;font-weight:bold;'>0.518</td><td style='color:#ff9800;'>0.035</td><td>6</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_ind_d_bb_sq</td><td style='color:#ff9800;font-weight:bold;'>0.518</td><td style='color:#ff9800;'>0.035</td><td>7</td><td>0</td><td>mlp_policy</td><td>volatility</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_top6_bb_ema</td><td style='color:#ff9800;font-weight:bold;'>0.518</td><td style='color:#ff9800;'>0.035</td><td>8</td><td>0</td><td>mlp_policy</td><td>volatility</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_ind_c_stoch</td><td style='color:#ff9800;font-weight:bold;'>0.512</td><td style='color:#ff9800;'>0.033</td><td>9</td><td>0</td><td>mlp_policy</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_fix_ml</td><td style='color:#ff9800;font-weight:bold;'>0.508</td><td style='color:#ff9800;'>0.033</td><td>10</td><td>0</td><td>mlp_policy</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_fix_e</td><td style='color:#ff9800;font-weight:bold;'>0.493</td><td style='color:#ff9800;'>0.035</td><td>11</td><td>0</td><td>mlp_policy</td><td>volatility</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_tick_breako</td><td style='color:#ff9800;font-weight:bold;'>0.491</td><td style='color:#ff9800;'>0.035</td><td>12</td><td>0</td><td>qr_dqn</td><td>timing</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_fix_c</td><td style='color:#ff9800;font-weight:bold;'>0.489</td><td style='color:#ff9800;'>0.033</td><td>13</td><td>0</td><td>mlp_policy</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_top4_ema_st</td><td style='color:#ff9800;font-weight:bold;'>0.489</td><td style='color:#ff9800;'>0.033</td><td>14</td><td>0</td><td>mlp_policy</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_ind_a_stoch</td><td style='color:#ff9800;font-weight:bold;'>0.481</td><td style='color:#ff9800;'>0.033</td><td>15</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_rl_m15</td><td style='color:#ff9800;font-weight:bold;'>0.481</td><td style='color:#ff9800;'>0.034</td><td>16</td><td>0</td><td>qr_dqn</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_top5_macd_s</td><td style='color:#ff9800;font-weight:bold;'>0.474</td><td style='color:#ff9800;'>0.033</td><td>17</td><td>0</td><td>mlp_policy</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_fix_a</td><td style='color:#ff9800;font-weight:bold;'>0.469</td><td style='color:#ff9800;'>0.033</td><td>18</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_ind_f_cci_a</td><td style='color:#ff9800;font-weight:bold;'>0.462</td><td style='color:#ff9800;'>0.035</td><td>19</td><td>0</td><td>mlp_policy</td><td>volatility</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_dist_commit</td><td style='color:#ff9800;font-weight:bold;'>0.459</td><td style='color:#ff9800;'>0.035</td><td>20</td><td>0</td><td>mlp_policy</td><td>volatility</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_top2_macd_s</td><td style='color:#ff9800;font-weight:bold;'>0.454</td><td style='color:#ff9800;'>0.033</td><td>21</td><td>0</td><td>mlp_policy</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_tw_asia</td><td style='color:#ff9800;font-weight:bold;'>0.454</td><td style='color:#ff9800;'>0.035</td><td>22</td><td>0</td><td>mlp_policy</td><td>timing</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_ind_e_atr_c</td><td style='color:#ff9800;font-weight:bold;'>0.450</td><td style='color:#ff9800;'>0.035</td><td>23</td><td>0</td><td>mlp_policy</td><td>volatility</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_rl_m15_real</td><td style='color:#ff9800;font-weight:bold;'>0.446</td><td style='color:#ff9800;'>0.035</td><td>24</td><td>0</td><td>qr_dqn</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_tw_ny</td><td style='color:#ff9800;font-weight:bold;'>0.441</td><td style='color:#ff9800;'>0.033</td><td>25</td><td>0</td><td>mlp_policy</td><td>timing</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_dist_pred</td><td style='color:#ff9800;font-weight:bold;'>0.427</td><td style='color:#ff9800;'>0.035</td><td>26</td><td>0</td><td>qr_dqn</td><td>volatility</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_top3_ichi_s</td><td style='color:#ff9800;font-weight:bold;'>0.417</td><td style='color:#ff9800;'>0.033</td><td>27</td><td>0</td><td>mlp_policy</td><td>trend</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_top1_stoch_</td><td style='color:#ff9800;font-weight:bold;'>0.411</td><td style='color:#ff9800;'>0.033</td><td>28</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td style='color:#4caf50;'>active</td></tr>
-<tr><td>seed_tw_london</td><td style='color:#ff9800;font-weight:bold;'>0.410</td><td style='color:#ff9800;'>0.033</td><td>29</td><td>0</td><td>mlp_policy</td><td>timing</td><td style='color:#4caf50;'>active</td></tr>
-            </table>
-        </div>
+<h2>👥 Population</h2>
+<table>
+<thead><tr><th>Agent ID</th><th>Fitness</th><th>Rank</th><th>Gen</th><th>Architecture</th><th>Specialization</th><th>Status</th></tr></thead>
+<tbody><tr><td>evo_efcc7372</td><td class="pos">0.624</td><td>1</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_e4977db0</td><td class="pos">0.615</td><td>2</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_a13f74f0</td><td class="pos">0.602</td><td>3</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_2cda2fd7</td><td class="warn">0.592</td><td>4</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_6653e362</td><td class="warn">0.573</td><td>5</td><td>10</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_28daf03b</td><td class="warn">0.572</td><td>6</td><td>10</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_5cebfb6e</td><td class="warn">0.571</td><td>7</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_3f586c15</td><td class="warn">0.559</td><td>8</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_36e659f9</td><td class="warn">0.553</td><td>9</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_95a0df1f</td><td class="warn">0.552</td><td>10</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_ml_supertre</td><td class="warn">0.552</td><td>11</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>evo_b00f146a</td><td class="warn">0.550</td><td>12</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_rl_m5</td><td class="warn">0.548</td><td>13</td><td>0</td><td>qr_dqn</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>evo_4b507cac</td><td class="warn">0.547</td><td>14</td><td>10</td><td>qr_dqn</td><td>timing</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_0820823a</td><td class="warn">0.546</td><td>15</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_1ae95334</td><td class="warn">0.543</td><td>16</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_c5f12be1</td><td class="warn">0.542</td><td>17</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_311a03a1</td><td class="warn">0.542</td><td>18</td><td>10</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_1ae15623</td><td class="warn">0.539</td><td>19</td><td>10</td><td>qr_dqn</td><td>timing</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_c32b80f4</td><td class="warn">0.536</td><td>20</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_cc6ecf4a</td><td class="warn">0.535</td><td>21</td><td>10</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_3b7cf63d</td><td class="warn">0.530</td><td>22</td><td>10</td><td>qr_dqn</td><td>mean_reversion</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_rl_h1</td><td class="warn">0.528</td><td>23</td><td>0</td><td>qr_dqn</td><td>macro</td><td class="status-active">active</td></tr>
+<tr><td>evo_93896054</td><td class="warn">0.527</td><td>24</td><td>10</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_45a27a60</td><td class="warn">0.525</td><td>25</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_b148063d</td><td class="warn">0.524</td><td>26</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_3c0c77be</td><td class="warn">0.524</td><td>27</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_da027938</td><td class="warn">0.522</td><td>28</td><td>10</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_rl_m1</td><td class="warn">0.520</td><td>29</td><td>0</td><td>qr_dqn</td><td>timing</td><td class="status-active">active</td></tr>
+<tr><td>seed_void_hunter</td><td class="warn">0.520</td><td>30</td><td>0</td><td>qr_dqn</td><td>volatility</td><td class="status-active">active</td></tr>
+<tr><td>evo_7f60d9e0</td><td class="warn">0.519</td><td>31</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_ind_b_hamme</td><td class="warn">0.518</td><td>32</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-active">active</td></tr>
+<tr><td>seed_ind_d_bb_sq</td><td class="warn">0.518</td><td>33</td><td>0</td><td>mlp_policy</td><td>volatility</td><td class="status-active">active</td></tr>
+<tr><td>seed_top6_bb_ema</td><td class="warn">0.518</td><td>34</td><td>0</td><td>mlp_policy</td><td>volatility</td><td class="status-active">active</td></tr>
+<tr><td>evo_f9178cf2</td><td class="warn">0.518</td><td>35</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_0780b6e0</td><td class="warn">0.517</td><td>36</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_c15e9ec9</td><td class="warn">0.516</td><td>37</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_db8929ce</td><td class="warn">0.515</td><td>38</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_ind_c_stoch</td><td class="warn">0.512</td><td>39</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>evo_0e3d57c2</td><td class="warn">0.511</td><td>40</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_26ebd7fa</td><td class="warn">0.508</td><td>41</td><td>10</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_fix_ml</td><td class="warn">0.508</td><td>42</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>evo_3133fdb8</td><td class="warn">0.506</td><td>43</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_b78a2f49</td><td class="warn">0.505</td><td>44</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_26132e98</td><td class="warn">0.502</td><td>45</td><td>10</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_de36ba60</td><td class="warn">0.501</td><td>46</td><td>10</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_d7a240a1</td><td class="warn">0.500</td><td>47</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_00aea210</td><td class="warn">0.499</td><td>48</td><td>10</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_e6813e6c</td><td class="warn">0.497</td><td>49</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_ea71f001</td><td class="warn">0.493</td><td>50</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_fix_e</td><td class="warn">0.493</td><td>51</td><td>0</td><td>mlp_policy</td><td>volatility</td><td class="status-active">active</td></tr>
+<tr><td>evo_f30e31aa</td><td class="warn">0.491</td><td>52</td><td>11</td><td>qr_dqn</td><td>timing</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_tick_breako</td><td class="warn">0.491</td><td>53</td><td>0</td><td>qr_dqn</td><td>timing</td><td class="status-active">active</td></tr>
+<tr><td>seed_fix_c</td><td class="warn">0.489</td><td>54</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>seed_top4_ema_st</td><td class="warn">0.489</td><td>55</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>evo_87ff309b</td><td class="warn">0.487</td><td>56</td><td>10</td><td>qr_dqn</td><td>mean_reversion</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_ind_a_stoch</td><td class="warn">0.481</td><td>57</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-active">active</td></tr>
+<tr><td>seed_rl_m15</td><td class="warn">0.481</td><td>58</td><td>0</td><td>qr_dqn</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>evo_15edd448</td><td class="warn">0.480</td><td>59</td><td>10</td><td>qr_dqn</td><td>mean_reversion</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_b23828c8</td><td class="warn">0.478</td><td>60</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_896e8088</td><td class="warn">0.474</td><td>61</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_top5_macd_s</td><td class="warn">0.474</td><td>62</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>seed_fix_a</td><td class="warn">0.469</td><td>63</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-active">active</td></tr>
+<tr><td>evo_a16603f5</td><td class="warn">0.464</td><td>64</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_ind_f_cci_a</td><td class="warn">0.462</td><td>65</td><td>0</td><td>mlp_policy</td><td>volatility</td><td class="status-active">active</td></tr>
+<tr><td>evo_2d612322</td><td class="warn">0.461</td><td>66</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_dist_commit</td><td class="warn">0.459</td><td>67</td><td>0</td><td>mlp_policy</td><td>volatility</td><td class="status-active">active</td></tr>
+<tr><td>evo_f3f03bf0</td><td class="warn">0.459</td><td>68</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_top2_macd_s</td><td class="warn">0.454</td><td>69</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>seed_tw_asia</td><td class="warn">0.454</td><td>70</td><td>0</td><td>mlp_policy</td><td>timing</td><td class="status-active">active</td></tr>
+<tr><td>seed_ind_e_atr_c</td><td class="warn">0.450</td><td>71</td><td>0</td><td>mlp_policy</td><td>volatility</td><td class="status-active">active</td></tr>
+<tr><td>evo_bd6681d5</td><td class="warn">0.446</td><td>72</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_rl_m15_real</td><td class="warn">0.446</td><td>73</td><td>0</td><td>qr_dqn</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>seed_tw_ny</td><td class="warn">0.441</td><td>74</td><td>0</td><td>mlp_policy</td><td>timing</td><td class="status-active">active</td></tr>
+<tr><td>seed_dist_pred</td><td class="warn">0.427</td><td>75</td><td>0</td><td>qr_dqn</td><td>volatility</td><td class="status-active">active</td></tr>
+<tr><td>evo_23423f8b</td><td class="warn">0.417</td><td>76</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_top3_ichi_s</td><td class="warn">0.417</td><td>77</td><td>0</td><td>mlp_policy</td><td>trend</td><td class="status-active">active</td></tr>
+<tr><td>evo_84009169</td><td class="warn">0.412</td><td>78</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="status-nursery">nursery</td></tr>
+<tr><td>seed_top1_stoch_</td><td class="warn">0.411</td><td>79</td><td>0</td><td>mlp_policy</td><td>mean_reversion</td><td class="status-active">active</td></tr>
+<tr><td>seed_tw_london</td><td class="warn">0.410</td><td>80</td><td>0</td><td>mlp_policy</td><td>timing</td><td class="status-active">active</td></tr>
+<tr><td>evo_717eafa0</td><td class="neg">0.388</td><td>81</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="status-nursery">nursery</td></tr>
+<tr><td>evo_e1112f5d</td><td class="neg">0.000</td><td>82</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_8bbed9d7</td><td class="neg">0.000</td><td>83</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_f5082b7f</td><td class="neg">0.000</td><td>84</td><td>1</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_1a998261</td><td class="neg">0.000</td><td>85</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_300f6444</td><td class="neg">0.000</td><td>86</td><td>1</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_349ec381</td><td class="neg">0.000</td><td>87</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_7c82fc4b</td><td class="neg">0.000</td><td>88</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_add8680e</td><td class="neg">0.000</td><td>89</td><td>2</td><td>qr_dqn</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_25330516</td><td class="neg">0.000</td><td>90</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_f0d40b0e</td><td class="neg">0.000</td><td>91</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_44718980</td><td class="neg">0.000</td><td>92</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_e635cd03</td><td class="neg">0.000</td><td>93</td><td>2</td><td>qr_dqn</td><td>trend</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_9f62bccd</td><td class="neg">0.000</td><td>94</td><td>2</td><td>qr_dqn</td><td>timing</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_fd2527c0</td><td class="neg">0.000</td><td>95</td><td>2</td><td>qr_dqn</td><td>volatility</td><td class="status-culled">culled</td></tr>
+<tr><td>evo_4f044075</td><td class="neg">0.000</td><td>96</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_76bf56c3</td><td class="neg">0.000</td><td>97</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_2e3346f4</td><td class="neg">0.000</td><td>98</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_9a996f9d</td><td class="neg">0.000</td><td>99</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_e53180c0</td><td class="neg">0.000</td><td>100</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_5c710e7c</td><td class="neg">0.000</td><td>101</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_103a8a37</td><td class="neg">0.000</td><td>102</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_82ff99d8</td><td class="neg">0.000</td><td>103</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_9046e670</td><td class="neg">0.000</td><td>104</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_053b012b</td><td class="neg">0.000</td><td>105</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_cbb21475</td><td class="neg">0.000</td><td>106</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_834bd22c</td><td class="neg">0.000</td><td>107</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_52964870</td><td class="neg">0.000</td><td>108</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_3750714d</td><td class="neg">0.000</td><td>109</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_1035905f</td><td class="neg">0.000</td><td>110</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_c79d7789</td><td class="neg">0.000</td><td>111</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_8cb64890</td><td class="neg">0.000</td><td>112</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_a2f53205</td><td class="neg">0.000</td><td>113</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_1c4e7848</td><td class="neg">0.000</td><td>114</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_49360573</td><td class="neg">0.000</td><td>115</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_aef1721e</td><td class="neg">0.000</td><td>116</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_95f38883</td><td class="neg">0.000</td><td>117</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_ceb39e29</td><td class="neg">0.000</td><td>118</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_4188d1d8</td><td class="neg">0.000</td><td>119</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_face1e08</td><td class="neg">0.000</td><td>120</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_47c2ae7c</td><td class="neg">0.000</td><td>121</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_dbbc3f92</td><td class="neg">0.000</td><td>122</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_e6efd219</td><td class="neg">0.000</td><td>123</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_30b7edc6</td><td class="neg">0.000</td><td>124</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_c1c2a38e</td><td class="neg">0.000</td><td>125</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_06e2495b</td><td class="neg">0.000</td><td>126</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_8df4b24a</td><td class="neg">0.000</td><td>127</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_daf81885</td><td class="neg">0.000</td><td>128</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_07d6c541</td><td class="neg">0.000</td><td>129</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_c3f5d871</td><td class="neg">0.000</td><td>130</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_c9005846</td><td class="neg">0.000</td><td>131</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_a0097518</td><td class="neg">0.000</td><td>132</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_f05433ef</td><td class="neg">0.000</td><td>133</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_1c8c2c49</td><td class="neg">0.000</td><td>134</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_3ed53acc</td><td class="neg">0.000</td><td>135</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_911a7ff0</td><td class="neg">0.000</td><td>136</td><td>11</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_3404176a</td><td class="neg">0.000</td><td>137</td><td>11</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_377d6534</td><td class="neg">0.000</td><td>138</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_532dcd6b</td><td class="neg">0.000</td><td>139</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_d1fa2318</td><td class="neg">0.000</td><td>140</td><td>11</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_62a427b3</td><td class="neg">0.000</td><td>141</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_d24edf31</td><td class="neg">0.000</td><td>142</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_1ed236d2</td><td class="neg">0.000</td><td>143</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_8746f354</td><td class="neg">0.000</td><td>144</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_95690fd9</td><td class="neg">0.000</td><td>145</td><td>11</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_62a30d16</td><td class="neg">0.000</td><td>146</td><td>12</td><td>mlp_policy</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_b1529b07</td><td class="neg">0.000</td><td>147</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_8ccc4e7f</td><td class="neg">0.000</td><td>148</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_ebc125ab</td><td class="neg">0.000</td><td>149</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_62294ca8</td><td class="neg">0.000</td><td>150</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_61290ea3</td><td class="neg">0.000</td><td>151</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_546efff8</td><td class="neg">0.000</td><td>152</td><td>12</td><td>mlp_policy</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_1bb5e834</td><td class="neg">0.000</td><td>153</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_8c5f1c95</td><td class="neg">0.000</td><td>154</td><td>12</td><td>mlp_policy</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_b6e0e9c5</td><td class="neg">0.000</td><td>155</td><td>12</td><td>qr_dqn</td><td>macro</td><td class="">stillborn</td></tr>
+<tr><td>evo_ff0b99d7</td><td class="neg">0.000</td><td>156</td><td>12</td><td>mlp_policy</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_c47845c1</td><td class="neg">0.000</td><td>157</td><td>12</td><td>mlp_policy</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_d1a18f65</td><td class="neg">0.000</td><td>158</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_834d62e4</td><td class="neg">0.000</td><td>159</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_28436da7</td><td class="neg">0.000</td><td>160</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_bd55132c</td><td class="neg">0.000</td><td>161</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_6c45406c</td><td class="neg">0.000</td><td>162</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_550d7087</td><td class="neg">0.000</td><td>163</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_0f340d55</td><td class="neg">0.000</td><td>164</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_4a65fc6e</td><td class="neg">0.000</td><td>165</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_99749928</td><td class="neg">0.000</td><td>166</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_05a0746b</td><td class="neg">0.000</td><td>167</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_dc86a01b</td><td class="neg">0.000</td><td>168</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_b9795fc3</td><td class="neg">0.000</td><td>169</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_bca575a0</td><td class="neg">0.000</td><td>170</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_b5754588</td><td class="neg">0.000</td><td>171</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_4610b9c2</td><td class="neg">0.000</td><td>172</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_6b210d0e</td><td class="neg">0.000</td><td>173</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_4a53bdc0</td><td class="neg">0.000</td><td>174</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_7b557378</td><td class="neg">0.000</td><td>175</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_cd339ef1</td><td class="neg">0.000</td><td>176</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_1205c318</td><td class="neg">0.000</td><td>177</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_7238e580</td><td class="neg">0.000</td><td>178</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_053fd221</td><td class="neg">0.000</td><td>179</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_d5f3819d</td><td class="neg">0.000</td><td>180</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_90e07dca</td><td class="neg">0.000</td><td>181</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_5b3dcd52</td><td class="neg">0.000</td><td>182</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_7ef6bbdb</td><td class="neg">0.000</td><td>183</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_bf3c30ae</td><td class="neg">0.000</td><td>184</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_06a04f37</td><td class="neg">0.000</td><td>185</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_fca46abd</td><td class="neg">0.000</td><td>186</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_36b35f79</td><td class="neg">0.000</td><td>187</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_402c5ccc</td><td class="neg">0.000</td><td>188</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_d2045efd</td><td class="neg">0.000</td><td>189</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_da78a201</td><td class="neg">0.000</td><td>190</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_b61b946f</td><td class="neg">0.000</td><td>191</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_b7ffb052</td><td class="neg">0.000</td><td>192</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_5722f3ad</td><td class="neg">0.000</td><td>193</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_056ed648</td><td class="neg">0.000</td><td>194</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_a089bb0c</td><td class="neg">0.000</td><td>195</td><td>12</td><td>qr_dqn</td><td>volatility</td><td class="">stillborn</td></tr>
+<tr><td>evo_b6ee2284</td><td class="neg">0.000</td><td>196</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_0c740773</td><td class="neg">0.000</td><td>197</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_8ee4ef5a</td><td class="neg">0.000</td><td>198</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_0ceb2a32</td><td class="neg">0.000</td><td>199</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_17baae5c</td><td class="neg">0.000</td><td>200</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_61e0fdb6</td><td class="neg">0.000</td><td>201</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_870ef2e1</td><td class="neg">0.000</td><td>202</td><td>12</td><td>mlp_policy</td><td>timing</td><td class="">stillborn</td></tr>
+<tr><td>evo_39eb607f</td><td class="neg">0.000</td><td>203</td><td>12</td><td>qr_dqn</td><td>trend</td><td class="">stillborn</td></tr>
+<tr><td>evo_cad2fb40</td><td class="neg">0.000</td><td>204</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr>
+<tr><td>evo_a9b7b6c6</td><td class="neg">0.000</td><td>205</td><td>12</td><td>mlp_policy</td><td>mean_reversion</td><td class="">stillborn</td></tr></tbody>
+</table>
 
-        <div class="panel panel-full">
-            <h2>&#x1F3AD; Nursery Shadow Trading (Live PnL)</h2>
-            <table>
-                <tr><th>Agent ID</th><th>Fitness<br><small>(DA+Sharpe)</small></th><th>Fitness<br><small>(Registry)</small></th><th>Attn<br><small>(Weight)</small></th><th>Gen</th><th>Trades</th><th>PnL (JPY)</th><th>PF</th><th>Win Rate</th></tr>
-                <tr><td>🟡 evo_23423f8b</td><td style='color:#4caf50;font-weight:bold;'>0.671</td><td style='color:#f44336;'>0.417</td><td style='color:#555;'>—</td><td>12</td><td>10</td><td style='color:#4caf50;font-weight:bold;'>14,192</td><td style='color:#4caf50;'>4.79</td><td>70.0%</td></tr>
-<tr><td>🟡 evo_efcc7372</td><td style='color:#4caf50;font-weight:bold;'>0.639</td><td style='color:#4caf50;'>0.624</td><td style='color:#555;'>—</td><td>12</td><td>25</td><td style='color:#4caf50;font-weight:bold;'>11,770</td><td style='color:#4caf50;'>4.32</td><td>68.0%</td></tr>
-<tr><td>🟡 evo_0820823a</td><td style='color:#ff9800;font-weight:bold;'>0.598</td><td style='color:#ff9800;'>0.546</td><td style='color:#555;'>—</td><td>12</td><td>24</td><td style='color:#4caf50;font-weight:bold;'>11,341</td><td style='color:#4caf50;'>3.31</td><td>62.5%</td></tr>
-<tr><td>🟢 evo_2cda2fd7</td><td style='color:#ff9800;font-weight:bold;'>0.586</td><td style='color:#4caf50;'>0.592</td><td style='color:#555;'>—</td><td>11</td><td>51</td><td style='color:#4caf50;font-weight:bold;'>38,743</td><td style='color:#4caf50;'>4.21</td><td>60.8%</td></tr>
-<tr><td>🟡 evo_a13f74f0</td><td style='color:#ff9800;font-weight:bold;'>0.578</td><td style='color:#4caf50;'>0.602</td><td style='color:#555;'>—</td><td>12</td><td>40</td><td style='color:#4caf50;font-weight:bold;'>9,093</td><td style='color:#4caf50;'>1.78</td><td>60.0%</td></tr>
-<tr><td>🟢 evo_e4977db0</td><td style='color:#ff9800;font-weight:bold;'>0.569</td><td style='color:#4caf50;'>0.615</td><td style='color:#555;'>—</td><td>11</td><td>64</td><td style='color:#4caf50;font-weight:bold;'>26,601</td><td style='color:#4caf50;'>2.78</td><td>56.2%</td></tr>
-<tr><td>🟢 evo_6653e362</td><td style='color:#ff9800;font-weight:bold;'>0.564</td><td style='color:#4caf50;'>0.573</td><td style='color:#555;'>—</td><td>10</td><td>165</td><td style='color:#4caf50;font-weight:bold;'>43,558</td><td style='color:#4caf50;'>2.10</td><td>57.6%</td></tr>
-<tr><td>🟢 evo_28daf03b</td><td style='color:#ff9800;font-weight:bold;'>0.564</td><td style='color:#4caf50;'>0.572</td><td style='color:#555;'>—</td><td>10</td><td>126</td><td style='color:#4caf50;font-weight:bold;'>31,657</td><td style='color:#4caf50;'>2.05</td><td>57.1%</td></tr>
-<tr><td>🟡 evo_b148063d</td><td style='color:#ff9800;font-weight:bold;'>0.552</td><td style='color:#ff9800;'>0.524</td><td style='color:#555;'>—</td><td>12</td><td>27</td><td style='color:#4caf50;font-weight:bold;'>10,576</td><td style='color:#4caf50;'>2.93</td><td>51.9%</td></tr>
-<tr><td>🟢 evo_36e659f9</td><td style='color:#ff9800;font-weight:bold;'>0.551</td><td style='color:#4caf50;'>0.553</td><td style='color:#555;'>—</td><td>11</td><td>87</td><td style='color:#4caf50;font-weight:bold;'>29,166</td><td style='color:#4caf50;'>1.89</td><td>55.2%</td></tr>
-<tr><td>🟡 evo_c5f12be1</td><td style='color:#ff9800;font-weight:bold;'>0.547</td><td style='color:#ff9800;'>0.542</td><td style='color:#555;'>—</td><td>12</td><td>38</td><td style='color:#4caf50;font-weight:bold;'>9,401</td><td style='color:#4caf50;'>2.16</td><td>52.6%</td></tr>
-<tr><td>🟡 evo_5cebfb6e</td><td style='color:#ff9800;font-weight:bold;'>0.546</td><td style='color:#4caf50;'>0.571</td><td style='color:#555;'>—</td><td>12</td><td>21</td><td style='color:#4caf50;font-weight:bold;'>14,869</td><td style='color:#4caf50;'>2.68</td><td>52.4%</td></tr>
-<tr><td>🟢 evo_3f586c15</td><td style='color:#ff9800;font-weight:bold;'>0.541</td><td style='color:#4caf50;'>0.559</td><td style='color:#555;'>—</td><td>11</td><td>77</td><td style='color:#4caf50;font-weight:bold;'>8,538</td><td style='color:#ff9800;'>1.48</td><td>54.5%</td></tr>
-<tr><td>🟢 evo_4b507cac</td><td style='color:#ff9800;font-weight:bold;'>0.540</td><td style='color:#ff9800;'>0.547</td><td style='color:#555;'>—</td><td>10</td><td>126</td><td style='color:#4caf50;font-weight:bold;'>52,506</td><td style='color:#4caf50;'>2.83</td><td>51.6%</td></tr>
-<tr><td>🟢 evo_93896054</td><td style='color:#ff9800;font-weight:bold;'>0.540</td><td style='color:#ff9800;'>0.527</td><td style='color:#555;'>—</td><td>10</td><td>171</td><td style='color:#4caf50;font-weight:bold;'>67,015</td><td style='color:#4caf50;'>2.37</td><td>53.2%</td></tr>
-<tr><td>🟢 evo_3133fdb8</td><td style='color:#ff9800;font-weight:bold;'>0.539</td><td style='color:#ff9800;'>0.506</td><td style='color:#555;'>—</td><td>11</td><td>54</td><td style='color:#4caf50;font-weight:bold;'>12,342</td><td style='color:#4caf50;'>1.64</td><td>53.7%</td></tr>
-<tr><td>🟢 evo_311a03a1</td><td style='color:#ff9800;font-weight:bold;'>0.538</td><td style='color:#ff9800;'>0.542</td><td style='color:#555;'>—</td><td>10</td><td>139</td><td style='color:#4caf50;font-weight:bold;'>38,502</td><td style='color:#4caf50;'>1.99</td><td>51.8%</td></tr>
-<tr><td>🟢 evo_1ae15623</td><td style='color:#ff9800;font-weight:bold;'>0.534</td><td style='color:#ff9800;'>0.539</td><td style='color:#555;'>—</td><td>10</td><td>166</td><td style='color:#4caf50;font-weight:bold;'>32,084</td><td style='color:#4caf50;'>1.68</td><td>53.0%</td></tr>
-<tr><td>🟢 evo_3b7cf63d</td><td style='color:#ff9800;font-weight:bold;'>0.533</td><td style='color:#ff9800;'>0.530</td><td style='color:#555;'>—</td><td>10</td><td>203</td><td style='color:#4caf50;font-weight:bold;'>38,761</td><td style='color:#4caf50;'>1.86</td><td>51.7%</td></tr>
-<tr><td>🟢 evo_0780b6e0</td><td style='color:#ff9800;font-weight:bold;'>0.529</td><td style='color:#ff9800;'>0.517</td><td style='color:#555;'>—</td><td>11</td><td>70</td><td style='color:#4caf50;font-weight:bold;'>22,796</td><td style='color:#4caf50;'>2.58</td><td>50.0%</td></tr>
-<tr><td>🟢 evo_b00f146a</td><td style='color:#ff9800;font-weight:bold;'>0.528</td><td style='color:#4caf50;'>0.550</td><td style='color:#555;'>—</td><td>11</td><td>93</td><td style='color:#4caf50;font-weight:bold;'>19,709</td><td style='color:#4caf50;'>1.88</td><td>50.5%</td></tr>
-<tr><td>🟢 evo_da027938</td><td style='color:#ff9800;font-weight:bold;'>0.527</td><td style='color:#ff9800;'>0.522</td><td style='color:#555;'>—</td><td>10</td><td>172</td><td style='color:#4caf50;font-weight:bold;'>45,582</td><td style='color:#4caf50;'>2.01</td><td>51.2%</td></tr>
-<tr><td>🟢 evo_cc6ecf4a</td><td style='color:#ff9800;font-weight:bold;'>0.525</td><td style='color:#ff9800;'>0.535</td><td style='color:#555;'>—</td><td>10</td><td>154</td><td style='color:#4caf50;font-weight:bold;'>44,347</td><td style='color:#4caf50;'>2.34</td><td>50.0%</td></tr>
-<tr><td>🟡 evo_c32b80f4</td><td style='color:#ff9800;font-weight:bold;'>0.521</td><td style='color:#ff9800;'>0.536</td><td style='color:#555;'>—</td><td>12</td><td>42</td><td style='color:#4caf50;font-weight:bold;'>5,899</td><td style='color:#4caf50;'>1.57</td><td>50.0%</td></tr>
-<tr><td>🟢 evo_1ae95334</td><td style='color:#ff9800;font-weight:bold;'>0.520</td><td style='color:#ff9800;'>0.543</td><td style='color:#555;'>—</td><td>12</td><td>53</td><td style='color:#4caf50;font-weight:bold;'>7,830</td><td style='color:#4caf50;'>1.57</td><td>50.9%</td></tr>
-<tr><td>🟢 evo_95a0df1f</td><td style='color:#ff9800;font-weight:bold;'>0.513</td><td style='color:#4caf50;'>0.552</td><td style='color:#555;'>—</td><td>11</td><td>93</td><td style='color:#4caf50;font-weight:bold;'>10,209</td><td style='color:#ff9800;'>1.49</td><td>49.5%</td></tr>
-<tr><td>🟢 evo_3c0c77be</td><td style='color:#ff9800;font-weight:bold;'>0.512</td><td style='color:#ff9800;'>0.524</td><td style='color:#555;'>—</td><td>11</td><td>79</td><td style='color:#4caf50;font-weight:bold;'>10,897</td><td style='color:#ff9800;'>1.49</td><td>49.4%</td></tr>
-<tr><td>🟢 evo_db8929ce</td><td style='color:#ff9800;font-weight:bold;'>0.512</td><td style='color:#ff9800;'>0.515</td><td style='color:#555;'>—</td><td>11</td><td>73</td><td style='color:#4caf50;font-weight:bold;'>13,922</td><td style='color:#4caf50;'>1.94</td><td>47.9%</td></tr>
-<tr><td>🟡 evo_f9178cf2</td><td style='color:#ff9800;font-weight:bold;'>0.510</td><td style='color:#ff9800;'>0.518</td><td style='color:#555;'>—</td><td>11</td><td>44</td><td style='color:#4caf50;font-weight:bold;'>8,926</td><td style='color:#4caf50;'>1.72</td><td>47.7%</td></tr>
-<tr><td>🟢 evo_45a27a60</td><td style='color:#ff9800;font-weight:bold;'>0.510</td><td style='color:#ff9800;'>0.525</td><td style='color:#555;'>—</td><td>11</td><td>124</td><td style='color:#4caf50;font-weight:bold;'>19,196</td><td style='color:#4caf50;'>1.73</td><td>47.6%</td></tr>
-<tr><td>🟢 evo_00aea210</td><td style='color:#ff9800;font-weight:bold;'>0.509</td><td style='color:#ff9800;'>0.499</td><td style='color:#555;'>—</td><td>10</td><td>224</td><td style='color:#4caf50;font-weight:bold;'>30,610</td><td style='color:#4caf50;'>1.56</td><td>48.2%</td></tr>
-<tr><td>🟢 evo_0e3d57c2</td><td style='color:#ff9800;font-weight:bold;'>0.509</td><td style='color:#ff9800;'>0.511</td><td style='color:#555;'>—</td><td>11</td><td>136</td><td style='color:#4caf50;font-weight:bold;'>17,098</td><td style='color:#ff9800;'>1.44</td><td>48.5%</td></tr>
-<tr><td>🟢 evo_de36ba60</td><td style='color:#ff9800;font-weight:bold;'>0.509</td><td style='color:#ff9800;'>0.501</td><td style='color:#555;'>—</td><td>10</td><td>247</td><td style='color:#4caf50;font-weight:bold;'>41,619</td><td style='color:#4caf50;'>1.71</td><td>49.0%</td></tr>
-<tr><td>🟢 evo_7f60d9e0</td><td style='color:#ff9800;font-weight:bold;'>0.508</td><td style='color:#ff9800;'>0.519</td><td style='color:#555;'>—</td><td>11</td><td>111</td><td style='color:#4caf50;font-weight:bold;'>11,565</td><td style='color:#ff9800;'>1.43</td><td>48.6%</td></tr>
-<tr><td>🟡 evo_e6813e6c</td><td style='color:#ff9800;font-weight:bold;'>0.507</td><td style='color:#ff9800;'>0.497</td><td style='color:#555;'>—</td><td>12</td><td>33</td><td style='color:#4caf50;font-weight:bold;'>3,756</td><td style='color:#ff9800;'>1.45</td><td>48.5%</td></tr>
-<tr><td>🟢 evo_15edd448</td><td style='color:#ff9800;font-weight:bold;'>0.501</td><td style='color:#ff9800;'>0.480</td><td style='color:#555;'>—</td><td>10</td><td>244</td><td style='color:#4caf50;font-weight:bold;'>24,184</td><td style='color:#ff9800;'>1.41</td><td>47.5%</td></tr>
-<tr><td>🟢 evo_26132e98</td><td style='color:#ff9800;font-weight:bold;'>0.499</td><td style='color:#ff9800;'>0.502</td><td style='color:#555;'>—</td><td>10</td><td>182</td><td style='color:#4caf50;font-weight:bold;'>11,963</td><td style='color:#ff9800;'>1.29</td><td>47.8%</td></tr>
-<tr><td>🟢 evo_b78a2f49</td><td style='color:#ff9800;font-weight:bold;'>0.498</td><td style='color:#ff9800;'>0.505</td><td style='color:#555;'>—</td><td>11</td><td>50</td><td style='color:#4caf50;font-weight:bold;'>19,227</td><td style='color:#4caf50;'>2.31</td><td>46.0%</td></tr>
-<tr><td>🟡 evo_c15e9ec9</td><td style='color:#ff9800;font-weight:bold;'>0.498</td><td style='color:#ff9800;'>0.516</td><td style='color:#555;'>—</td><td>12</td><td>25</td><td style='color:#4caf50;font-weight:bold;'>12,885</td><td style='color:#4caf50;'>4.45</td><td>44.0%</td></tr>
-<tr><td>🟢 evo_87ff309b</td><td style='color:#ff9800;font-weight:bold;'>0.497</td><td style='color:#ff9800;'>0.487</td><td style='color:#555;'>—</td><td>10</td><td>245</td><td style='color:#4caf50;font-weight:bold;'>24,639</td><td style='color:#ff9800;'>1.38</td><td>46.9%</td></tr>
-<tr><td>🟡 evo_bd6681d5</td><td style='color:#ff9800;font-weight:bold;'>0.496</td><td style='color:#f44336;'>0.446</td><td style='color:#555;'>—</td><td>12</td><td>35</td><td style='color:#4caf50;font-weight:bold;'>1,355</td><td style='color:#ff9800;'>1.09</td><td>48.6%</td></tr>
-<tr><td>🟡 evo_ea71f001</td><td style='color:#ff9800;font-weight:bold;'>0.491</td><td style='color:#ff9800;'>0.493</td><td style='color:#555;'>—</td><td>12</td><td>49</td><td style='color:#4caf50;font-weight:bold;'>2,235</td><td style='color:#ff9800;'>1.15</td><td>46.9%</td></tr>
-<tr><td>🟢 evo_26ebd7fa</td><td style='color:#ff9800;font-weight:bold;'>0.488</td><td style='color:#ff9800;'>0.508</td><td style='color:#555;'>—</td><td>10</td><td>149</td><td style='color:#4caf50;font-weight:bold;'>19,707</td><td style='color:#4caf50;'>1.53</td><td>44.3%</td></tr>
-<tr><td>🟢 evo_a16603f5</td><td style='color:#ff9800;font-weight:bold;'>0.487</td><td style='color:#ff9800;'>0.464</td><td style='color:#555;'>—</td><td>12</td><td>99</td><td style='color:#4caf50;font-weight:bold;'>15,213</td><td style='color:#4caf50;'>1.51</td><td>44.4%</td></tr>
-<tr><td>🟡 evo_717eafa0</td><td style='color:#ff9800;font-weight:bold;'>0.487</td><td style='color:#f44336;'>0.388</td><td style='color:#555;'>—</td><td>12</td><td>28</td><td style='color:#4caf50;font-weight:bold;'>18,014</td><td style='color:#4caf50;'>2.62</td><td>42.9%</td></tr>
-<tr><td>🟡 evo_d7a240a1</td><td style='color:#ff9800;font-weight:bold;'>0.483</td><td style='color:#ff9800;'>0.500</td><td style='color:#555;'>—</td><td>12</td><td>13</td><td style='color:#4caf50;font-weight:bold;'>139</td><td style='color:#ff9800;'>1.04</td><td>46.2%</td></tr>
-<tr><td>🟢 evo_f30e31aa</td><td style='color:#ff9800;font-weight:bold;'>0.480</td><td style='color:#ff9800;'>0.491</td><td style='color:#555;'>—</td><td>11</td><td>182</td><td style='color:#4caf50;font-weight:bold;'>9,805</td><td style='color:#ff9800;'>1.23</td><td>44.5%</td></tr>
-<tr><td>🟡 evo_f3f03bf0</td><td style='color:#ff9800;font-weight:bold;'>0.480</td><td style='color:#ff9800;'>0.459</td><td style='color:#555;'>—</td><td>12</td><td>41</td><td style='color:#4caf50;font-weight:bold;'>15,107</td><td style='color:#4caf50;'>2.09</td><td>41.5%</td></tr>
-<tr><td>🟡 evo_b23828c8</td><td style='color:#ff9800;font-weight:bold;'>0.475</td><td style='color:#ff9800;'>0.478</td><td style='color:#555;'>—</td><td>11</td><td>39</td><td style='color:#f44336;font-weight:bold;'>-1,186</td><td style='color:#f44336;'>0.89</td><td>46.2%</td></tr>
-<tr><td>🟢 evo_896e8088</td><td style='color:#ff9800;font-weight:bold;'>0.470</td><td style='color:#ff9800;'>0.474</td><td style='color:#555;'>—</td><td>12</td><td>50</td><td style='color:#4caf50;font-weight:bold;'>4,560</td><td style='color:#ff9800;'>1.37</td><td>42.0%</td></tr>
-<tr><td>🟢 evo_2d612322</td><td style='color:#ff9800;font-weight:bold;'>0.468</td><td style='color:#ff9800;'>0.461</td><td style='color:#555;'>—</td><td>12</td><td>197</td><td style='color:#4caf50;font-weight:bold;'>22,115</td><td style='color:#ff9800;'>1.40</td><td>41.6%</td></tr>
-<tr><td>🟡 evo_84009169</td><td style='color:#ff9800;font-weight:bold;'>0.445</td><td style='color:#f44336;'>0.412</td><td style='color:#555;'>—</td><td>12</td><td>15</td><td style='color:#f44336;font-weight:bold;'>-696</td><td style='color:#f44336;'>0.87</td><td>40.0%</td></tr>
-            </table>
-        </div>
+<div class="grid">
+<div>
+<h2>🎯 Recent Decisions (last 20)</h2>
+<table>
+<thead><tr><th>Bar</th><th>Direction</th><th>Value</th><th>Regime</th><th>Price</th></tr></thead>
+<tbody><tr><td>3044</td><td class="">HOLD</td><td>0.503</td><td>range</td><td>4521.19</td><td>-</td></tr>
+<tr><td>3045</td><td class="">HOLD</td><td>0.514</td><td>range</td><td>4521.95</td><td>-</td></tr>
+<tr><td>3046</td><td class="">HOLD</td><td>0.588</td><td>range</td><td>4522.90</td><td>-</td></tr>
+<tr><td>3047</td><td class="">HOLD</td><td>0.640</td><td>range</td><td>4522.25</td><td>-</td></tr>
+<tr><td>3048</td><td class="">HOLD</td><td>0.696</td><td>range</td><td>4521.00</td><td>-</td></tr>
+<tr><td>3049</td><td class="">HOLD</td><td>0.759</td><td>range</td><td>4520.64</td><td>-</td></tr>
+<tr><td>3050</td><td class="">CLOSE</td><td>0.780</td><td>range</td><td>4518.79</td><td>-</td></tr>
+<tr><td>3051</td><td class="">HOLD</td><td>0.674</td><td>range</td><td>4519.43</td><td>-</td></tr>
+<tr><td>3052</td><td class="">HOLD</td><td>0.734</td><td>range</td><td>4520.26</td><td>-</td></tr>
+<tr><td>3053</td><td class="">HOLD</td><td>0.764</td><td>range</td><td>4521.05</td><td>-</td></tr>
+<tr><td>3054</td><td class="neg">SELL</td><td>0.914</td><td>range</td><td>4519.80</td><td>-</td></tr>
+<tr><td>3055</td><td class="">HOLD</td><td>1.035</td><td>range</td><td>4520.15</td><td>-</td></tr>
+<tr><td>3056</td><td class="">CLOSE</td><td>1.025</td><td>range</td><td>4519.68</td><td>-</td></tr>
+<tr><td>3057</td><td class="">CLOSE</td><td>1.140</td><td>range</td><td>4519.40</td><td>-</td></tr>
+<tr><td>3058</td><td class="">CLOSE</td><td>1.194</td><td>range</td><td>4519.74</td><td>-</td></tr>
+<tr><td>3059</td><td class="neg">SELL</td><td>1.262</td><td>range</td><td>4519.99</td><td>-</td></tr>
+<tr><td>3060</td><td class="pos">BUY</td><td>1.274</td><td>range</td><td>4519.48</td><td>-</td></tr>
+<tr><td>3061</td><td class="pos">BUY</td><td>1.315</td><td>range</td><td>4519.56</td><td>-</td></tr>
+<tr><td>3062</td><td class="">HOLD</td><td>1.171</td><td>range</td><td>4520.50</td><td>-</td></tr>
+<tr><td>3063</td><td class="">HOLD</td><td>1.296</td><td>range</td><td>4520.24</td><td>-</td></tr></tbody>
+</table>
+</div>
 
-        <div class="panel">
-            <h2>&#x1F3AF; Chairman Decisions (last 20)</h2>
-            <table>
-                <tr><th>Bar</th><th>Direction</th><th>Value</th><th>PnL (ATR)</th><th>Regime</th><th>Price</th></tr>
-                <tr><td>3044</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>0.503</td><td style='color:#555;'></td><td>range</td><td>4521.19</td></tr>
-<tr><td>3045</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>0.514</td><td style='color:#555;'></td><td>range</td><td>4521.95</td></tr>
-<tr><td>3046</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>0.588</td><td style='color:#555;'></td><td>range</td><td>4522.90</td></tr>
-<tr><td>3047</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>0.640</td><td style='color:#555;'></td><td>range</td><td>4522.25</td></tr>
-<tr><td>3048</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>0.696</td><td style='color:#555;'></td><td>range</td><td>4521.00</td></tr>
-<tr><td>3049</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>0.759</td><td style='color:#555;'></td><td>range</td><td>4520.64</td></tr>
-<tr><td>3050</td><td style='color:#ff9800;font-weight:bold;'>CLOSE</td><td>0.780</td><td style='color:#f44336;'>-0.86</td><td>range</td><td>4518.79</td></tr>
-<tr><td>3051</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>0.674</td><td style='color:#555;'></td><td>range</td><td>4519.43</td></tr>
-<tr><td>3052</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>0.734</td><td style='color:#555;'></td><td>range</td><td>4520.26</td></tr>
-<tr><td>3053</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>0.764</td><td style='color:#555;'></td><td>range</td><td>4521.05</td></tr>
-<tr><td>3054</td><td style='color:#f44336;font-weight:bold;'>SELL</td><td>0.914</td><td style='color:#555;'></td><td>range</td><td>4519.80</td></tr>
-<tr><td>3055</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>1.035</td><td style='color:#555;'></td><td>range</td><td>4520.15</td></tr>
-<tr><td>3056</td><td style='color:#ff9800;font-weight:bold;'>CLOSE</td><td>1.025</td><td style='color:#4caf50;'>+0.07</td><td>range</td><td>4519.68</td></tr>
-<tr><td>3057</td><td style='color:#ff9800;font-weight:bold;'>CLOSE</td><td>1.140</td><td style='color:#555;'></td><td>range</td><td>4519.40</td></tr>
-<tr><td>3058</td><td style='color:#ff9800;font-weight:bold;'>CLOSE</td><td>1.194</td><td style='color:#555;'></td><td>range</td><td>4519.74</td></tr>
-<tr><td>3059</td><td style='color:#f44336;font-weight:bold;'>SELL</td><td>1.262</td><td style='color:#555;'></td><td>range</td><td>4519.99</td></tr>
-<tr><td>3060</td><td style='color:#4caf50;font-weight:bold;'>BUY</td><td>1.274</td><td style='color:#555;'></td><td>range</td><td>4519.48</td></tr>
-<tr><td>3061</td><td style='color:#4caf50;font-weight:bold;'>BUY</td><td>1.315</td><td style='color:#4caf50;'>+0.00</td><td>range</td><td>4519.56</td></tr>
-<tr><td>3062</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>1.171</td><td style='color:#555;'></td><td>range</td><td>4520.50</td></tr>
-<tr><td>3063</td><td style='color:#9e9e9e;font-weight:bold;'>HOLD</td><td>1.296</td><td style='color:#555;'></td><td>range</td><td>4520.24</td></tr>
-            </table>
-        </div>
+<div>
+<h2>🔄 Evolution Events (last 10)</h2>
+<table>
+<thead><tr><th>Time</th><th>Event</th><th>Agent</th><th>Details</th></tr></thead>
+<tbody><tr><td colspan="4" class="empty">No data available</td></tr></tbody>
+</table>
+</div>
+</div>
 
-        <div class="panel">
-            <h2>&#x1F4B0; Chairman Closed Trades</h2>
-            <table>
-                <tr><th>Time</th><th>Dir</th><th>PnL (JPY)</th><th>Bars</th><th>Price</th></tr>
-                <tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#4caf50;font-weight:bold;'>+747</td><td>0</td><td>0.00 → 4514.74</td></tr>
-<tr><td></td><td style='color:#4caf50;'>BUY</td><td style='color:#4caf50;font-weight:bold;'>+9,869</td><td>0</td><td>0.00 → 4519.57</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#4caf50;font-weight:bold;'>+303</td><td>0</td><td>0.00 → 4457.18</td></tr>
-<tr><td></td><td style='color:#4caf50;'>BUY</td><td style='color:#f44336;font-weight:bold;'>-1,092</td><td>0</td><td>0.00 → 4340.68</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#4caf50;font-weight:bold;'>+862</td><td>0</td><td>0.00 → 4353.85</td></tr>
-<tr><td></td><td style='color:#4caf50;'>BUY</td><td style='color:#4caf50;font-weight:bold;'>+22</td><td>0</td><td>0.00 → 4359.30</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#4caf50;font-weight:bold;'>+1,004</td><td>0</td><td>0.00 → 4359.16</td></tr>
-<tr><td></td><td style='color:#4caf50;'>BUY</td><td style='color:#4caf50;font-weight:bold;'>+168</td><td>0</td><td>0.00 → 4365.45</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#4caf50;font-weight:bold;'>+1,797</td><td>0</td><td>0.00 → 4391.91</td></tr>
-<tr><td></td><td style='color:#4caf50;'>BUY</td><td style='color:#4caf50;font-weight:bold;'>+125</td><td>0</td><td>0.00 → 4391.78</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#f44336;font-weight:bold;'>-693</td><td>0</td><td>0.00 → 4400.40</td></tr>
-<tr><td></td><td style='color:#4caf50;'>BUY</td><td style='color:#f44336;font-weight:bold;'>-1,691</td><td>0</td><td>0.00 → 4396.01</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#4caf50;font-weight:bold;'>+974</td><td>0</td><td>0.00 → 4406.62</td></tr>
-<tr><td></td><td style='color:#4caf50;'>BUY</td><td style='color:#4caf50;font-weight:bold;'>+542</td><td>0</td><td>0.00 → 4412.72</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#4caf50;font-weight:bold;'>+2,756</td><td>0</td><td>0.00 → 4409.35</td></tr>
-<tr><td></td><td style='color:#4caf50;'>BUY</td><td style='color:#4caf50;font-weight:bold;'>+438</td><td>0</td><td>0.00 → 4426.63</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#f44336;font-weight:bold;'>-849</td><td>0</td><td>0.00 → 4399.52</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#f44336;font-weight:bold;'>-533</td><td>0</td><td>0.00 → 4395.34</td></tr>
-<tr><td></td><td style='color:#f44336;'>SELL</td><td style='color:#f44336;font-weight:bold;'>-410</td><td>0</td><td>0.00 → 4389.41</td></tr>
-<tr><td></td><td style='color:#4caf50;'>BUY</td><td style='color:#4caf50;font-weight:bold;'>+5,217</td><td>0</td><td>0.00 → 4349.80</td></tr>
-            </table>
-        </div>
-    </div>
+<h2>💰 Parliament Trade History (Chairman Magic 920100)</h2>
+<div style="margin-bottom:8px;font-size:0.85em;">
+Trades: <b>14</b> | Win Rate: <b>93%</b> | PnL: <span class="pos"><b>¥18878</b></span>
+</div>
+<table>
+<thead><tr><th>Time</th><th>Direction</th><th>Entry</th><th>Exit</th><th>PnL</th><th>Source</th></tr></thead>
+<tbody><tr><td>08/20 09:56</td><td class="neg">SELL</td><td>4506.56</td><td>4506.09</td><td class="pos">¥74</td><td>Shadow 2</td></tr>
+<tr><td>08/20 09:39</td><td class="pos">BUY</td><td>4510.75</td><td>4509.86</td><td class="neg">¥-141</td><td>Shadow 4</td></tr>
+<tr><td>08/20 09:39</td><td class="neg">SELL</td><td>4510.51</td><td>4510.11</td><td class="pos">¥63</td><td>Shadow 2</td></tr>
+<tr><td>08/20 09:17</td><td class="pos">BUY</td><td>4514.86</td><td>4516.59</td><td class="pos">¥274</td><td>Shadow 4</td></tr>
+<tr><td>08/20 09:01</td><td class="pos">BUY</td><td>4514.80</td><td>4515.60</td><td class="pos">¥127</td><td>Shadow 4</td></tr>
+<tr><td>08/20 08:50</td><td class="neg">SELL</td><td>4519.46</td><td>4514.74</td><td class="pos">¥747</td><td>Chairman</td></tr>
+<tr><td>08/20 08:20</td><td class="pos">BUY</td><td>4510.66</td><td>4519.30</td><td class="pos">¥1367</td><td>Shadow 4</td></tr>
+<tr><td>08/20 05:42</td><td class="pos">BUY</td><td>4457.17</td><td>4519.57</td><td class="pos">¥9869</td><td>Chairman</td></tr>
+<tr><td>08/20 04:16</td><td class="pos">BUY</td><td>4496.20</td><td>4504.65</td><td class="pos">¥1337</td><td>Shadow 4</td></tr>
+<tr><td>08/20 03:58</td><td class="pos">BUY</td><td>4491.63</td><td>4495.18</td><td class="pos">¥562</td><td>Shadow 1</td></tr>
+<tr><td>08/20 03:29</td><td class="neg">SELL</td><td>4484.24</td><td>4476.58</td><td class="pos">¥1214</td><td>Shadow 2</td></tr>
+<tr><td>08/20 02:07</td><td class="pos">BUY</td><td>4485.46</td><td>4493.18</td><td class="pos">¥1223</td><td>Shadow 1</td></tr>
+<tr><td>08/20 01:45</td><td class="pos">BUY</td><td>4489.12</td><td>4494.76</td><td class="pos">¥893</td><td>Shadow 4</td></tr>
+<tr><td>08/20 00:27</td><td class="pos">BUY</td><td>4474.28</td><td>4482.29</td><td class="pos">¥1269</td><td>Shadow 2</td></tr></tbody>
+</table>
 
-    <div class="footer">
-        Evolution Dashboard v1.0 | Data: registry.json + parliament_decisions.jsonl + evolution.jsonl
-    </div>
+<script>
+setTimeout(()=>location.reload(), 180000);
+</script>
 </body>
 </html>
