@@ -108,7 +108,7 @@
         &nbsp;|&nbsp;
         <a href="real.html" style="color:#ff6666;text-decoration:none;font-size:1.0em;">&#x1F4B0; Real Account</a>
     </nav>
-    <div class="subtitle">Auto-refresh: 30s | 2026-08-26 02:16:06</div>
+    <div class="subtitle">Auto-refresh: 30s | 2026-08-26 02:16:19</div>
 
     <div class="metrics">
         <div class="metric">
@@ -190,7 +190,7 @@
             <h2>&#x1F3AD; Nursery Shadow Trading (Live PnL)</h2>
             <table>
                 <tr><th>Agent ID</th><th>Fitness<br><small>(DA+Sharpe)</small></th><th>Fitness<br><small>(Registry)</small></th><th>Gen</th><th>Trades</th><th>PnL (JPY)</th><th>PF</th><th>Win Rate</th></tr>
-                <tr><td style='color:#4caf50;'>evo_12ce1ece</td><td style='color:#4caf50;font-weight:bold;'>0.669</td><td style='color:#555;'>—</td><td>14</td><td>67</td><td style='color:#4caf50;font-weight:bold;'>22,489</td><td style='color:#4caf50;'>3.78</td><td>71.6%</td></tr>
+                <tr><td style='color:#4caf50;'>evo_12ce1ece</td><td style='color:#4caf50;font-weight:bold;'>0.671</td><td style='color:#555;'>—</td><td>14</td><td>68</td><td style='color:#4caf50;font-weight:bold;'>22,682</td><td style='color:#4caf50;'>3.81</td><td>72.1%</td></tr>
 <tr><td style='color:#4caf50;'>evo_d7a240a1</td><td style='color:#ff9800;font-weight:bold;'>0.592</td><td style='color:#4caf50;'>0.577</td><td>12</td><td>70</td><td style='color:#4caf50;font-weight:bold;'>11,160</td><td style='color:#4caf50;'>1.91</td><td>62.9%</td></tr>
 <tr><td style='color:#4caf50;'>evo_defc960b</td><td style='color:#ff9800;font-weight:bold;'>0.591</td><td style='color:#4caf50;'>0.606</td><td>14</td><td>83</td><td style='color:#4caf50;font-weight:bold;'>11,363</td><td style='color:#4caf50;'>1.83</td><td>62.7%</td></tr>
 <tr><td style='color:#4caf50;'>evo_2cda2fd7</td><td style='color:#ff9800;font-weight:bold;'>0.583</td><td style='color:#4caf50;'>0.593</td><td>11</td><td>149</td><td style='color:#4caf50;font-weight:bold;'>72,459</td><td style='color:#4caf50;'>3.34</td><td>60.4%</td></tr>
@@ -309,12 +309,37 @@
 
         <div class="panel panel-full">
             <h2>&#x1F6AA; Exit Parliament + Shadow Cabinet</h2>
-            <div style='margin-bottom:8px;'>
-        <span style='color:#aaa;'>Evaluations:</span> 16,615 &nbsp;|&nbsp;
-        <span style='color:#aaa;'>Close signals:</span> 1 (0.0%) &nbsp;|&nbsp;
-        <span style='color:#aaa;'>Avg PnL(ATR) close:</span> <span style='color:#4caf50;'>+23.477</span> &nbsp;|&nbsp;
-        <span style='color:#aaa;'>Avg PnL(ATR) hold:</span> <span style='color:#4caf50;'>+0.213</span>
-    </div><table>
+            
+    <div style='display:grid;grid-template-columns:1fr 1fr;gap:12px;'>
+        <div>
+            <h3 style='color:#aaa;margin:0 0 6px 0;font-size:0.9em;'>SHADOW (Live Monitoring)</h3>
+            <table style='width:100%;'>
+                <tr><td style='color:#aaa;'>Evaluations</td><td style='font-weight:bold;'>30,498</td></tr>
+                <tr><td style='color:#aaa;'>Close signals</td><td>369 <span style='color:#888;'>(1.2%)</span></td></tr>
+                <tr><td style='color:#aaa;'>Avg PnL @ close</td><td style='color:#4caf50;font-weight:bold;'>+7.177 ATR</td></tr>
+                <tr><td style='color:#aaa;'>Avg PnL @ hold</td><td style='color:#4caf50;'>+0.130 ATR</td></tr>
+                <tr><td style='color:#aaa;'>Avg SL distance</td><td>1.384 ATR</td></tr>
+                <tr><td style='color:#aaa;'>Avg bars held @ close</td><td>861</td></tr>
+                <tr><td style='color:#aaa;'>Confidence</td><td>High(&gt;0.5): 313 | Med(0.35-0.5): 56</td></tr>
+            </table>
+        </div>
+        <div>
+            <h3 style='color:#aaa;margin:0 0 6px 0;font-size:0.9em;'>VIRTUAL (Post-Close Tracking)</h3>
+            <table style='width:100%;'>
+                <tr><td style='color:#aaa;'>Total exits</td><td style='font-weight:bold;'>2,733</td></tr>
+                <tr><td style='color:#aaa;'>Win rate</td><td style='color:#f44336;font-weight:bold;'>45.9%</td></tr>
+                <tr><td style='color:#aaa;'>Total PnL</td><td style='color:#4caf50;font-weight:bold;'>+878.1 ATR</td></tr>
+                <tr><td style='color:#aaa;'>Avg PnL/trade</td><td style='color:#4caf50;'>+0.321 ATR</td></tr>
+                <tr><td style='color:#aaa;'>Avg bars held</td><td>2</td></tr>
+                <tr><td style='color:#aaa;'>Exit reasons</td><td style='font-size:0.85em;'>ai sl hit=2713, ai close=20</td></tr>
+            </table>
+        </div>
+    </div>
+        </div>
+
+        <div class="panel panel-full">
+            <h2>&#x1F47B; Shadow Cabinet</h2>
+            <table>
         <tr><th>Shadow</th><th>Trades</th><th>PnL (ATR)</th></tr>
         <tr><td>Shadow 0</td><td>14</td><td style='color:#4caf50;font-weight:bold;'>+6.4</td></tr><tr><td>Shadow 1</td><td>35</td><td style='color:#f44336;font-weight:bold;'>-10.2</td></tr><tr><td>Shadow 2</td><td>52</td><td style='color:#f44336;font-weight:bold;'>-67.1</td></tr>
     </table>
